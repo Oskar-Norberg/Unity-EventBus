@@ -2,20 +2,13 @@ using System;
 
 namespace ringo.EventSystem
 {
-    public class EventHandler<T> : IEventHandler where T : IEvent
+    public abstract class EventHandler<T> : IEventHandler where T : IEvent
     {
-        Action _callback;
-
-        public EventHandler(Action callback)
+        public EventHandler()
         {
-            _callback = callback;
-
             EventBus.Subscribe<T>(this);
         }
 
-        public void Handle(IEvent @event)
-        {
-            _callback.Invoke();
-        }
+        public abstract void Handle(IEvent @event);
     }
 }
