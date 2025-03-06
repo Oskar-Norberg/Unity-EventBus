@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ringo.EventSystem
 {
@@ -10,7 +11,20 @@ namespace ringo.EventSystem
         
         public static void Subscribe<T>(EventHandler<IEvent> handler) where T : IEvent
         {
-            _handlers.Add(typeof(T), new List<EventHandler<IEvent>>());
+            if (handler == null)
+            {
+                Debug.LogWarning("[EventBus] Subscribed to null subscriber");
+                return;
+            }
+            
+            if (_handlers.ContainsKey(typeof(T)))
+            {
+                _handlers[typeof(T)].Add(handler);
+                return;
+            }
+            
+            var newHandlerList = new List<EventHandler<IEvent>> { handler };
+            _handlers.Add(typeof(T), newHandlerList);
         }
         
         public static void Unsubscribe<T>(T @event, EventHandler<IEvent> handler) where T : IEvent
@@ -20,6 +34,9 @@ namespace ringo.EventSystem
         
         public static void Publish<T>(T @event) where T : IEvent
         {
+            if (!_handlers.ContainsKey(@event.GetType()))
+                return;
+            
             var handlers = _handlers[@event.GetType()];
 
             foreach (var handler in handlers)
