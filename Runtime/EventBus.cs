@@ -5,6 +5,7 @@ namespace ringo.EventSystem
 {
     public static class EventBus
     {
+        // TODO: Make sure this resets on domain reload
         private static Dictionary<Type, List<EventHandler<IEvent>>> _handlers = new();
         
         public static void Subscribe<T>(EventHandler<IEvent> handler) where T : IEvent
@@ -19,15 +20,11 @@ namespace ringo.EventSystem
         
         public static void Publish<T>(T @event) where T : IEvent
         {
-            foreach (var keyValuePair in _handlers)
+            var handlers = _handlers[@event.GetType()];
+
+            foreach (var handler in handlers)
             {
-                foreach (EventHandler<IEvent> handler in keyValuePair.Value)
-                {
-                    if (handler.GetType() == typeof(T))
-                    {
-                        handler.Handle(@event);
-                    }
-                }
+                handler.Handle(@event);
             }
         }
     }
