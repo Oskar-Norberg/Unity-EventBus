@@ -7,9 +7,9 @@ namespace ringo.EventSystem
     public static class EventBus
     {
         // TODO: Make sure this resets on domain reload
-        private static Dictionary<Type, List<EventHandler<IEvent>>> _handlers = new();
+        private static Dictionary<Type, List<IEventHandler>> _handlers = new();
         
-        public static void Subscribe<T>(EventHandler<IEvent> handler) where T : IEvent
+        public static void Subscribe<T>(IEventHandler handler) where T : IEvent
         {
             if (handler == null)
             {
@@ -22,8 +22,8 @@ namespace ringo.EventSystem
                 _handlers[typeof(T)].Add(handler);
                 return;
             }
-            
-            var newHandlerList = new List<EventHandler<IEvent>> { handler };
+
+            var newHandlerList = new List<IEventHandler> { handler };
             _handlers.Add(typeof(T), newHandlerList);
         }
         
