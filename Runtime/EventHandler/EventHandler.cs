@@ -1,5 +1,3 @@
-using System;
-
 namespace ringo.EventSystem
 {
     public abstract class EventHandler<T> : IEventHandler where T : IEvent

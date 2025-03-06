@@ -1,4 +1,3 @@
-
 namespace ringo.EventSystem
 {
     public interface IEventHandler
