@@ -6,8 +6,13 @@ namespace ringo.EventSystem
 {
     public static class EventBus
     {
-        // TODO: Make sure this resets on domain reload
         private static Dictionary<Type, List<IEventHandler>> _handlers = new();
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void InitializeOnLoad()
+        {
+            _handlers = new();
+        }
         
         public static void Subscribe<T>(IEventHandler handler) where T : IEvent
         {
