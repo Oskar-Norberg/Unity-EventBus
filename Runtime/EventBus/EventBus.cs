@@ -34,6 +34,12 @@ namespace ringo.EventSystem
         
         public static void Unsubscribe<T>(T @event, EventHandler<IEvent> handler) where T : IEvent
         {
+            if (!_handlers.ContainsKey(@event.GetType()))
+            {
+                Debug.LogWarning("[EventBus] Could not find event type to unsubscribe");
+                return;
+            }
+
             _handlers[@event.GetType()].Remove(handler);
         }
         
