@@ -6,7 +6,7 @@ namespace ringo.EventSystem
 {
     public static class EventBus
     {
-        private static Dictionary<Type, List<IEventHandler>> _handlers = new();
+        private static Dictionary<Type, HashSet<IEventHandler>> _handlers = new();
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void InitializeOnLoad()
@@ -28,7 +28,7 @@ namespace ringo.EventSystem
                 return;
             }
 
-            var newHandlerList = new List<IEventHandler> { handler };
+            var newHandlerList = new HashSet<IEventHandler> { handler };
             _handlers.Add(typeof(T), newHandlerList);
         }
         
