@@ -32,15 +32,15 @@ namespace ringo.EventSystem
             _handlers.Add(typeof(T), newHandlerList);
         }
         
-        public static void Unsubscribe<T>(T @event, EventHandler<IEvent> handler) where T : IEvent
+        public static void Unsubscribe<T>(IEventHandler handler) where T : IEvent
         {
-            if (!_handlers.ContainsKey(@event.GetType()))
+            if (!_handlers.ContainsKey(typeof(T)))
             {
                 Debug.LogWarning("[EventBus] Could not find event type to unsubscribe");
                 return;
             }
 
-            _handlers[@event.GetType()].Remove(handler);
+            _handlers[typeof(T)].Remove(handler);
         }
         
         public static void Publish<T>(T @event) where T : IEvent
