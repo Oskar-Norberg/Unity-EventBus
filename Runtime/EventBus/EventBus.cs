@@ -48,7 +48,8 @@ namespace ringo.EventSystem
             if (!_handlers.ContainsKey(@event.GetType()))
                 return;
             
-            var handlers = _handlers[@event.GetType()];
+            // Saves a snapshot of handlers to prevent concurrent modification
+            var handlers = new HashSet<IEventHandler>(_handlers[@event.GetType()]);
 
             foreach (var handler in handlers)
             {
